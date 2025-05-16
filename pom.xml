@@ -11,7 +11,8 @@
 	<groupId>com.clinica</groupId>
 	<artifactId>medica</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>clinica-medica</name>
+    <packaging>pom</packaging>
+    <name>clinica-medica</name>
 	<description>clinica medica</description>
 	<url/>
 	<licenses>
@@ -20,7 +21,13 @@
 	<developers>
 		<developer/>
 	</developers>
-	<scm>
+    <modules>
+        <module>clinica-medica-agendamento</module>
+		<module>clinica-medica-atendimento</module>
+		<module>clinica-medica-administrativo</module>
+		<module>clinica-core</module>
+	</modules>
+    <scm>
 		<connection/>
 		<developerConnection/>
 		<tag/>
