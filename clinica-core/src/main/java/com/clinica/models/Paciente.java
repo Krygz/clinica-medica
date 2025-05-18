@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -29,5 +30,6 @@ public class Paciente {
     private String contato;
     private String email;
     private LocalDateTime dataNascimento;
-    private List<Consulta> consulta;
+    @OneToMany
+    private List<Consulta> consultas;
 }

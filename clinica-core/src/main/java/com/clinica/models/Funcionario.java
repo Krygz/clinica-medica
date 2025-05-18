@@ -31,6 +31,8 @@ public class Funcionario {
     private String contato;
     private String email;
     private LocalDateTime dataNascimento;
+    @ManyToOne
+    @JoinColumn(name = "especialidade_id")
     private Especialidade especialidade;
     private Tipo tipo;
 }
