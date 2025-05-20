@@ -8,6 +8,7 @@ import com.clinica.models.Prontuario;
 import java.time.LocalDateTime;
 
 public record ConsultaResponseDTO(
+         Integer id,
          LocalDateTime dataHorario,
          String sintomas,
          boolean eRetorno,
