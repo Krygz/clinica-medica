@@ -34,5 +34,6 @@ public class Funcionario {
     @ManyToOne
     @JoinColumn(name = "especialidade_id")
     private Especialidade especialidade;
+    @Enumerated(EnumType.STRING)
     private Tipo tipo;
 }
