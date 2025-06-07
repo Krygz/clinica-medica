@@ -2,9 +2,9 @@ package com.clinica.services;
 
 import com.clinica.models.Consulta;
 import com.clinica.repositories.ConsultaRepository;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 public class ConsultaService {private final ConsultaRepository consultaRepository;
 
