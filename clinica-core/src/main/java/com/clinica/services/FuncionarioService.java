@@ -6,6 +6,8 @@ import com.clinica.models.Funcionario;
 import com.clinica.repositories.FuncionarioRepository;
 import org.modelmapper.ModelMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,7 @@ public class FuncionarioService {
 
     private final ModelMapper modelMapper;
     private final FuncionarioRepository funcionarioRepository;
+    private static final Logger log = LoggerFactory.getLogger(FuncionarioService.class);
 
     public FuncionarioService(ModelMapper modelMapper, FuncionarioRepository funcionarioRepository) {
         this.modelMapper = modelMapper;

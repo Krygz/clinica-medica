@@ -1,15 +1,12 @@
-package com.clinica.services
+package com.clinica.services;
 
 import com.clinica.models.Consulta;
 import com.clinica.repositories.ConsultaRepository;    
 import jakarta.transaction.Transactional;
-import med.voll.api.model.Consulta;
-import med.voll.api.repository.ConsultaRepository;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.stereotype.Service;
 
 @Service
 public class ConsultaService {
@@ -22,6 +19,7 @@ public class ConsultaService {
 
     @Transactional
     public Consulta agendarConsulta(Consulta consulta) {
+
 
         if (consulta.getDataHora().isBefore(LocalDateTime.now().plusHours(24))) {
             throw new IllegalArgumentException("Consultas devem ser agendadas com pelo menos 24h de antecedência.");
