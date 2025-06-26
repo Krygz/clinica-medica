@@ -1,8 +1,8 @@
 package com.clinica.controllers;
 
-import br.edu.imepac.comum.dtos.especialidade.EspecialidadeDto;
-import br.edu.imepac.comum.dtos.especialidade.EspecialidadeRequest;
-import br.edu.imepac.comum.services.EspecialidadeService;
+import com.clinica.dtos.EspecialidadeRequestDTO;
+import com.clinica.dtos.EspecialidadeResponseDTO;
+import com.clinica.services.EspecialidadeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -12,23 +12,23 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/especialidades")
-public class EspecialdadeController {
+public class EspecialidadeController {
     private final EspecialidadeService especialidadeService;
 
-    public EspecialdadeController(EspecialidadeService especialidadeService) {
+    public EspecialidadeController(EspecialidadeService especialidadeService) {
         this.especialidadeService = especialidadeService;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EspecialidadeDto criarEspecialidade(@RequestBody EspecialidadeRequest especialidadeRequest) {
+    public EspecialidadeResponseDTO criarEspecialidade(@RequestBody EspecialidadeRequestDTO especialidadeRequest) {
         log.info("Criando especialidade - controller: {}", especialidadeRequest);
         return especialidadeService.adicionarEspecialidade(especialidadeRequest);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public EspecialidadeDto atualizarEspecialidade(@PathVariable Long id, @RequestBody EspecialidadeDto especialidadeDto) {
+    public EspecialidadeResponseDTO atualizarEspecialidade(@PathVariable Long id, @RequestBody EspecialidadeRequestDTO especialidadeDto) {
         return especialidadeService.atualizarEspecialidade(id, especialidadeDto);
     }
 
@@ -40,13 +40,13 @@ public class EspecialdadeController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public EspecialidadeDto buscarEspecialidadePorId(@PathVariable Long id) {
+    public EspecialidadeResponseDTO buscarEspecialidadePorId(@PathVariable Long id) {
         return especialidadeService.buscarEspecialidadePorId(id);
     }
 
     @GetMapping("/listar")
     @ResponseStatus(HttpStatus.OK)
-    public List<EspecialidadeDto> listarEspecialidades() {
+    public List<EspecialidadeResponseDTO> listarEspecialidades() {
         return especialidadeService.listarEspecialidades();
     }
 }

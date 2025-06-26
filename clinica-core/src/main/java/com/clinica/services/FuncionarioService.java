@@ -29,7 +29,7 @@ public class FuncionarioService {
         return modelMapper.map(funcionario, FuncionarioResponseDTO.class);
     }
 
-    public FuncionarioResponseDTO atualizarFuncionario(Long id, FuncionarioResponseDTO funcionarioResponseDTO) {
+    public FuncionarioResponseDTO atualizarFuncionario(Long id, FuncionarioRequestDTO funcionarioResponseDTO) {
         log.info("Atualizando funcionário com ID: {}", id);
         Funcionario funcionarioExistente = funcionarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado com ID: " + id));
