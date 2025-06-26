@@ -1,8 +1,13 @@
 package com.clinica.controllers;
 
+import com.clinica.dtos.PerfilRequestDTO;
+import com.clinica.dtos.PerfilResponseDTO;
+import com.clinica.services.PerfilService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -16,14 +21,14 @@ public class PerfilController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PerfilDto criarPerfil(@RequestBody PerfilRequest perfilRequest) {
+    public PerfilResponseDTO criarPerfil(@RequestBody PerfilRequestDTO perfilRequest) {
         log.info("Criando perfil - controller: {}", perfilRequest);
         return perfilService.adicionarPerfil(perfilRequest);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PerfilDto atualizarPerfil(@PathVariable Long id, @RequestBody PerfilDto perfilDto) {
+    public PerfilResponseDTO atualizarPerfil(@PathVariable Long id, @RequestBody PerfilRequestDTO perfilDto) {
         log.info("Atualizar perfil - controller: {}", perfilDto);
         return perfilService.atualizarPerfil(id, perfilDto);
     }
@@ -37,14 +42,14 @@ public class PerfilController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PerfilDto buscarPerfilPorId(@PathVariable Long id) {
+    public PerfilResponseDTO buscarPerfilPorId(@PathVariable Long id) {
         log.info("Buscar perfil - controller: {}", id);
         return perfilService.buscarPerfilPorId(id);
     }
 
     @GetMapping("/listar")
     @ResponseStatus(HttpStatus.OK)
-    public List<PerfilDto> listarPerfis() {
+    public List<PerfilResponseDTO> listarPerfis() {
         log.info("Listar perfis - controller");
         return perfilService.listarPerfis();
     }
