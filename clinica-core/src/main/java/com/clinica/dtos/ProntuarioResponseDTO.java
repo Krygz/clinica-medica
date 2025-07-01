@@ -1,8 +1,15 @@
 package com.clinica.dtos;
 
-public record ProntuarioResponseDTO(
-    Integer id,
-    String receituario,
-    String exames,
-    String observacao) {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class ProntuarioResponseDTO {
+    private Integer id;
+    private String receituario;
+    private String exames;
+    private String observacao;
 }

@@ -2,27 +2,30 @@ package com.clinica.dtos;
 
 import com.clinica.enums.Tipo;
 import com.clinica.models.Especialidade;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-public record FuncionarioResponseDTO(
-         Long id,
-         String usuario,
-         Integer idade,
-         char sexo,
-         String cpf,
-         String rua,
-         String numero,
-         String complemento,
-         String bairro,
-         String cidade,
-         String estado,
-         String contato,
-         String email,
-         LocalDateTime dataNascimento,
-//        @ManyToOne
-//        @JoinColumn(name = "especialidade_id")
-        Especialidade especialidade,
-        Tipo tipo
-) {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class FuncionarioResponseDTO {
+    private Long id;
+    private String usuario;
+    private Integer idade;
+    private char sexo;
+    private String cpf;
+    private String rua;
+    private String numero;
+    private String complemento;
+    private String bairro;
+    private String cidade;
+    private String estado;
+    private String contato;
+    private String email;
+    private LocalDateTime dataNascimento;
+    private Especialidade especialidade;
+    private Tipo tipo;
 }
