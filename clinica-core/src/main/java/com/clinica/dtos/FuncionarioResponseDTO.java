@@ -6,7 +6,7 @@ import com.clinica.models.Especialidade;
 import java.time.LocalDateTime;
 
 public record FuncionarioResponseDTO(
-         Integer id,
+         Long id,
          String usuario,
          Integer idade,
          char sexo,

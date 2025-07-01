@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 public class Consulta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private LocalDateTime dataHorario;
+    private Long id;
+    private LocalDateTime dataHora;
     private String sintomas;
     private boolean eRetorno;
     private boolean estaAtiva;
@@ -32,4 +32,8 @@ public class Consulta {
     @ManyToOne
     @JoinColumn(name = "funcionario_id")
     private Funcionario funcionario;
+    
+    public Long getMedicoId() {
+        return funcionario != null ? funcionario.getId() : null;
+    }
 }

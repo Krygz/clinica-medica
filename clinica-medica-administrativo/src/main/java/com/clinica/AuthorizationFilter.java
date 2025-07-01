@@ -2,9 +2,9 @@ package com.clinica;
 
 import com.clinica.exception.ActionClinicaMedicaException;
 import com.clinica.exception.AuthenticationClinicaMedicaException;
+import com.clinica.models.Funcionario;
 import com.clinica.services.AutenticadorService;
 import com.clinica.services.AutorizadorService;
-import com.clinica.services.PerfilService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,61 +20,84 @@ import java.util.Optional;
 @Component
 public class AuthorizationFilter extends OncePerRequestFilter {
 
-    // **Injeção de Dependência**: The `PerfilService` is injected to verify user authorization.
-    private final PerfilService perfilService;
     private final AutenticadorService autenticadorService;
     private final AutorizadorService autorizadorService;
 
-    // **Construtor**: Receives the `PerfilService` dependency for initialization.
     public AuthorizationFilter(
-            PerfilService perfilService,
             AutenticadorService autenticadorService,
             AutorizadorService autorizadorService
     ) {
         this.autenticadorService = autenticadorService;
         this.autorizadorService = autorizadorService;
-        this.perfilService = perfilService;
     }
 
-    // **doFilterInternal**: This method intercepts HTTP requests and applies the authorization logic.
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            // **Obtenção do Caminho da Requisição**: Retrieves the request URI to check if it matches specific paths.
             String path = request.getRequestURI();
-            logger.debug("Iniciando validação de acesso para a requisição: {" + path + "}");
-            identificarFluxoValidarCredencial(path, filterChain, request, response);
+            log.debug("Iniciando validação de acesso para a requisição: {}", path);
+            
+            // Verificar se é uma rota de documentação ou health check
+            if (isPublicPath(path)) {
+                log.debug("Acesso permitido para rota pública: {}", path);
+                filterChain.doFilter(request, response);
+                return;
+            }
+            
+            // Validar autenticação e autorização
+            validarAcessoAplicacao(request, response, filterChain);
+            
         } catch (Exception e) {
-            logger.error("Erro ao prosseguir com a request de documentação: {" + e.getMessage() + "}");
-            throw new RuntimeException("Erro ao prosseguir com a request de documentação! {" + e.getMessage() + "}");
+            log.error("Erro ao processar requisição: {}", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("Erro interno do servidor");
         }
-
     }
 
-    private void validarAcessoAplicacao(String path, FilterChain filterChain, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        logger.debug("Iniciando validação de acesso para a aplicação");
-        // **Optional.ofNullable**: Retrieves the "usuario" header or throws an exception if not found.
+    private boolean isPublicPath(String path) {
+        return path.startsWith("/swagger-ui") || 
+               path.startsWith("/v3/api-docs") || 
+               path.startsWith("/actuator") ||
+               path.equals("/") ||
+               path.equals("/favicon.ico");
+    }
+
+    private void validarAcessoAplicacao(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) 
+            throws ServletException, IOException {
+        log.debug("Iniciando validação de acesso para a aplicação");
+        
+        // Obter headers de autenticação
         String usuario = Optional.ofNullable(request.getHeader("usuario"))
-                .orElseThrow(() -> new AuthenticationClinicaMedicaException("Usuario não encontrado!"));
-        // **Optional.ofNullable**: Retrieves the "senha" header or throws an exception if not found.
+                .orElseThrow(() -> new AuthenticationClinicaMedicaException("Usuário não encontrado"));
+        
         String senha = Optional.ofNullable(request.getHeader("senha"))
-                .orElseThrow(() -> new AuthenticationClinicaMedicaException("Senha não encontrado!"));
-        // **Optional.ofNullable**: Retrieves the "action" header or throws an exception if not found.
+                .orElseThrow(() -> new AuthenticationClinicaMedicaException("Senha não encontrada"));
+        
         String acao = Optional.ofNullable(request.getHeader("action"))
-                .orElseThrow(() -> new ActionClinicaMedicaException("Ação não encontrado!"));
+                .orElseThrow(() -> new ActionClinicaMedicaException("Ação não encontrada"));
 
-        //validar autenticação do usuário
-        logger.debug("Validando autenticação do usuário: {" + usuario + "}");
-    }
-
-    private void identificarFluxoValidarCredencial(String path, FilterChain filterChain, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        logger.debug("Iniciando a identificação  do fluxo e validação de acesso... {" + path + "}");
-        // **Verificação de Caminho**: Checks if the request path is for Swagger UI or API docs.
-        if (!path.startsWith("/clinica-medica-administrativo/swagger-ui") && !path.startsWith("/clinica-medica-administrativo/v3/api-docs")) {
-            logger.debug("Acesso permitido para a documentação da API: {" + path + "}");
-            validarAcessoAplicacao(path, filterChain, request, response);
+        try {
+            // Autenticar usuário
+            log.debug("Validando autenticação do usuário: {}", usuario);
+            Funcionario funcionario = autenticadorService.autenticar(usuario, senha);
+            
+            // Autorizar ação
+            log.debug("Validando autorização para ação: {}", acao);
+            autorizadorService.autorizar(funcionario, acao);
+            
+            // Se chegou até aqui, a autenticação e autorização foram bem-sucedidas
+            log.debug("Acesso autorizado para usuário: {} e ação: {}", usuario, acao);
+            filterChain.doFilter(request, response);
+            
+        } catch (AuthenticationClinicaMedicaException e) {
+            log.warn("Falha na autenticação: {}", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Dados de acesso inválidos");
+        } catch (ActionClinicaMedicaException e) {
+            log.warn("Falha na autorização: {}", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("Acesso negado");
         }
-        filterChain.doFilter(request, response);
     }
-}
+} 

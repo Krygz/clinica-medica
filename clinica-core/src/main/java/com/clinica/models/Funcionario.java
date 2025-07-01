@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
 public class Funcionario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String usuario;
-    private Integer senha;
+    private String senha;
     private Integer idade;
     private char sexo;
     private String cpf;

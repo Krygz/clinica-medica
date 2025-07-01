@@ -1,8 +1,8 @@
 package com.clinica.controllers;
 
-import com.clinica.core.dto.ConsultaRequestDTO;
-import com.clinica.core.dto.ConsultaResponseDTO;
-import com.clinica.core.service.ConsultaService;
+import com.clinica.dtos.ConsultaRequestDTO;
+import com.clinica.dtos.ConsultaResponseDTO;
+import com.clinica.services.ConsultaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ public class ConsultaController {
     public ConsultaResponseDTO agendarConsulta(@RequestBody ConsultaRequestDTO consultaDTO) {
         log.info("Recebida requisição para agendar nova consulta: {}", consultaDTO);
         ConsultaResponseDTO novaConsulta = consultaService.agendar(consultaDTO);
-        log.info("Consulta agendada com sucesso com o ID: {}", novaConsulta.getId());
+        log.info("Consulta agendada com sucesso com o ID: {}", novaConsulta.id());
         return novaConsulta;
     }
 
