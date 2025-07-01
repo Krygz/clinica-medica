@@ -41,16 +41,16 @@ public class AtendimentoService {
         log.info("Registrando atendimento: {}", dto);
         
         // Buscar paciente e médico
-        Paciente paciente = pacienteRepository.findById(dto.pacienteId())
-                .orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado com ID: " + dto.pacienteId()));
+        Paciente paciente = pacienteRepository.findById(dto.getPacienteId())
+                .orElseThrow(() -> new IllegalArgumentException("Paciente não encontrado com ID: " + dto.getPacienteId()));
         
-        Funcionario medico = funcionarioRepository.findById(dto.medicoId())
-                .orElseThrow(() -> new IllegalArgumentException("Médico não encontrado com ID: " + dto.medicoId()));
+        Funcionario medico = funcionarioRepository.findById(dto.getMedicoId())
+                .orElseThrow(() -> new IllegalArgumentException("Médico não encontrado com ID: " + dto.getMedicoId()));
         
         // Criar atendimento
         Atendimento atendimento = new Atendimento();
-        atendimento.setDescricao(dto.descricao());
-        atendimento.setDataHora(dto.dataHora() != null ? dto.dataHora() : LocalDateTime.now());
+        atendimento.setDescricao(dto.getDescricao());
+        atendimento.setDataHora(dto.getDataHora() != null ? dto.getDataHora() : LocalDateTime.now());
         atendimento.setPaciente(paciente);
         atendimento.setMedico(medico);
         atendimento.setAtivo(true);

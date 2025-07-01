@@ -1,9 +1,14 @@
 package com.clinica.dtos;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record EspecialidadeResponseDTO(
-        Long id,
-        String nome,
-        String descricao
-) {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class EspecialidadeResponseDTO {
+    private Long id;
+    private String nome;
+    private String descricao;
 }

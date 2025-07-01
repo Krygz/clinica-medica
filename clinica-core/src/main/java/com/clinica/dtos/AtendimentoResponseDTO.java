@@ -1,11 +1,18 @@
 package com.clinica.dtos;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
-public record AtendimentoResponseDTO(
-        Long id,
-        String descricao,
-        LocalDateTime dataHora,
-        Long pacienteId,
-        Long medicoId
-) {}
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class AtendimentoResponseDTO {
+    private Long id;
+    private String descricao;
+    private LocalDateTime dataHora;
+    private Long pacienteId;
+    private Long medicoId;
+}
