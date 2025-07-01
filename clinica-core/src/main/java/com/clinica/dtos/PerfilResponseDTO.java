@@ -1,7 +1,7 @@
 package com.clinica.dtos;
 
 public record PerfilResponseDTO(
-   Integer id,
+   Long id,
    String nome,
    boolean cadastrarFuncionario,
    boolean lerFuncionario,

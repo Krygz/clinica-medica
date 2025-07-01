@@ -1,8 +1,8 @@
 package com.clinica.controllers;
 
-import com.clinica.core.dto.AtendimentoRequestDTO;
-import com.clinica.core.dto.AtendimentoResponseDTO;
-import com.clinica.core.service.AtendimentoService;
+import com.clinica.dtos.AtendimentoRequestDTO;
+import com.clinica.dtos.AtendimentoResponseDTO;
+import com.clinica.services.AtendimentoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ public class AtendimentoController {
     public AtendimentoResponseDTO registrarAtendimento(@RequestBody AtendimentoRequestDTO dto) {
         log.info("Recebida requisição para registrar atendimento: {}", dto);
         AtendimentoResponseDTO novo = atendimentoService.registrar(dto);
-        log.info("Atendimento registrado com ID: {}", novo.getId());
+        log.info("Atendimento registrado com ID: {}", novo.id());
         return novo;
     }
 

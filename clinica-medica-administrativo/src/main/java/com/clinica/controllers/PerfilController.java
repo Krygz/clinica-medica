@@ -3,6 +3,7 @@ package com.clinica.controllers;
 import com.clinica.dtos.PerfilRequestDTO;
 import com.clinica.dtos.PerfilResponseDTO;
 import com.clinica.services.PerfilService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,29 +22,29 @@ public class PerfilController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PerfilResponseDTO criarPerfil(@RequestBody PerfilRequestDTO perfilRequest) {
+    public PerfilResponseDTO criarPerfil(@Valid @RequestBody PerfilRequestDTO perfilRequest) {
         log.info("Criando perfil - controller: {}", perfilRequest);
         return perfilService.adicionarPerfil(perfilRequest);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PerfilResponseDTO atualizarPerfil(@PathVariable Long id, @RequestBody PerfilRequestDTO perfilDto) {
-        log.info("Atualizar perfil - controller: {}", perfilDto);
+    public PerfilResponseDTO atualizarPerfil(@PathVariable Long id, @Valid @RequestBody PerfilRequestDTO perfilDto) {
+        log.info("Atualizar perfil com ID: {} - controller: {}", id, perfilDto);
         return perfilService.atualizarPerfil(id, perfilDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removerPerfil(@PathVariable Long id) {
-        log.info("Remover perfil - controller: {}", id);
+        log.info("Remover perfil com ID: {} - controller", id);
         perfilService.removerPerfil(id);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public PerfilResponseDTO buscarPerfilPorId(@PathVariable Long id) {
-        log.info("Buscar perfil - controller: {}", id);
+        log.info("Buscar perfil com ID: {} - controller", id);
         return perfilService.buscarPerfilPorId(id);
     }
 
