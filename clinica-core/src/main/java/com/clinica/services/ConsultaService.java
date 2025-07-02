@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import com.clinica.exception.ActionClinicaMedicaException;
 
 @Slf4j
 @Service
@@ -28,13 +29,17 @@ public class ConsultaService {
     @Transactional
     public Consulta agendarConsulta(Consulta consulta) {
         if (consulta.getDataHora().isBefore(LocalDateTime.now().plusHours(24))) {
-            throw new IllegalArgumentException("Consultas devem ser agendadas com pelo menos 24h de antecedência.");
+            throw new ActionClinicaMedicaException(
+                    "Consultas devem ser agendadas com pelo menos 24h de antecedência.");
         }
+
 
         boolean conflito = consultaRepository.existsByFuncionarioIdAndDataHora(consulta.getFuncionario().getId(), consulta.getDataHora());
         if (conflito) {
-            throw new IllegalStateException("Médico já possui consulta nesse horário.");
+            throw new ActionClinicaMedicaException(
+                    "Médico já possui consulta nesse horário.");
         }
+
 
         return consultaRepository.save(consulta);
     }
@@ -61,10 +66,11 @@ public class ConsultaService {
     @Transactional
     public void cancelar(Long consultaId) {
         log.info("Cancelando consulta: {}", consultaId);
-        
+
         Consulta consulta = consultaRepository.findById(consultaId)
-                .orElseThrow(() -> new IllegalArgumentException("Consulta não encontrada com ID: " + consultaId));
-        
+                .orElseThrow(() -> new ActionClinicaMedicaException(
+                        "Consulta não encontrada com ID: " + consultaId));
+
         consulta.setEstaAtiva(false);
         consultaRepository.save(consulta);
     }
@@ -78,7 +84,13 @@ public class ConsultaService {
     }
 
     @Transactional
-    public void cancelarConsulta(Long id) {
+    public void cancelarConsulta(Long id)
+    {
+        if (!consultaRepository.existsById(id)) {
+            throw new ActionClinicaMedicaException(
+                    "Consulta com ID " + id + " não encontrada para cancelamento");
+        }
+
         consultaRepository.deleteById(id);
     }
 }
