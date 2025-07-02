@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import com.clinica.exception.ActionClinicaMedicaException;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,8 +41,10 @@ public class PacienteService {
 
     public PacienteResponseDTO buscarPorId(Long id) {
         log.info("Buscando paciente com ID: {}", id);
+
         Paciente paciente = pacienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado com ID: " + id));
+                .orElseThrow(() -> new ActionClinicaMedicaException(
+                        "Paciente não encontrado com ID: " + id));
         return modelMapper.map(paciente, PacienteResponseDTO.class);
     }
 
@@ -49,7 +52,8 @@ public class PacienteService {
     public PacienteResponseDTO atualizarPaciente(Long id, PacienteRequestDTO pacienteRequestDTO) {
         log.info("Atualizando paciente com ID: {}", id);
         Paciente pacienteExistente = pacienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado com ID: " + id));
+                .orElseThrow(() -> new ActionClinicaMedicaException(
+                        "Paciente não encontrado com ID: " + id));
         modelMapper.map(pacienteRequestDTO, pacienteExistente);
         Paciente pacienteAtualizado = pacienteRepository.save(pacienteExistente);
         return modelMapper.map(pacienteAtualizado, PacienteResponseDTO.class);
@@ -59,7 +63,8 @@ public class PacienteService {
     public void excluirPaciente(Long id) {
         log.info("Excluindo paciente com ID: {}", id);
         Paciente paciente = pacienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado para exclusão."));
+                .orElseThrow(() -> new ActionClinicaMedicaException(
+                        "Paciente não encontrado para exclusão."));
         pacienteRepository.delete(paciente);
     }
 

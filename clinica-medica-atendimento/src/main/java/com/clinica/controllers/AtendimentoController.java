@@ -42,55 +42,6 @@ public class AtendimentoController {
         log.info("Recebida requisição para registrar atendimento: {}", dto);
         
         AtendimentoResponseDTO novo = atendimentoService.registrar(dto);
-        EntityModel<AtendimentoResponseDTO> entityModel = EntityModel.of(novo);
-        
-        // Adicionar links HATEOAS
-        entityModel.add(linkTo(methodOn(AtendimentoController.class).buscarPorId(novo.getId())).withSelfRel());
-        entityModel.add(linkTo(methodOn(AtendimentoController.class).listarPorPaciente(novo.getPacienteId())).withRel("atendimentos-paciente"));
-        entityModel.add(linkTo(methodOn(AtendimentoController.class).listarPorMedico(novo.getMedicoId())).withRel("atendimentos-medico"));
-        
-        log.info("Atendimento registrado com ID: {}", novo.getId());
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(entityModel, "Atendimento registrado com sucesso"));
-    }
-
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Buscar atendimento por ID", description = "Retorna um atendimento específico pelo seu ID")
-    public ResponseEntity<ApiResponse<EntityModel<AtendimentoResponseDTO>>> buscarPorId(
-            @Parameter(description = "ID do atendimento") @PathVariable Long id) {
-        log.info("Buscando atendimento com ID: {}", id);
-        
-        AtendimentoResponseDTO atendimento = atendimentoService.buscarPorId(id);
-        EntityModel<AtendimentoResponseDTO> entityModel = EntityModel.of(atendimento);
-        
-        // Adicionar links HATEOAS
-        entityModel.add(linkTo(methodOn(AtendimentoController.class).buscarPorId(id)).withSelfRel());
-        entityModel.add(linkTo(methodOn(AtendimentoController.class).listarTodos()).withRel("todos-atendimentos"));
-        
-        return ResponseEntity.ok(ApiResponse.success(entityModel, "Atendimento encontrado"));
-    }
-
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Listar todos os atendimentos", description = "Retorna todos os atendimentos registrados")
-    public ResponseEntity<ApiResponse<List<AtendimentoResponseDTO>>> listarTodos() {
-        log.info("Listando todos os atendimentos");
-        
-        List<AtendimentoResponseDTO> atendimentos = atendimentoService.listarTodos();
-        
-        return ResponseEntity.ok(ApiResponse.success(atendimentos, "Atendimentos listados com sucesso"));
-    }
-
-    @GetMapping("/ativos")
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Listar atendimentos ativos", description = "Retorna apenas os atendimentos ativos")
-    public ResponseEntity<ApiResponse<List<AtendimentoResponseDTO>>> listarAtivos() {
-        log.info("Listando atendimentos ativos");
-        
-        List<AtendimentoResponseDTO> atendimentos = atendimentoService.listarAtivos();
-        
-        return ResponseEntity.ok(ApiResponse.success(atendimentos, "Atendimentos ativos listados com sucesso"));
     }
 
     @GetMapping("/paciente/{pacienteId}")
@@ -166,4 +117,3 @@ public class AtendimentoController {
         return ResponseEntity.noContent().build();
     }
 }
-

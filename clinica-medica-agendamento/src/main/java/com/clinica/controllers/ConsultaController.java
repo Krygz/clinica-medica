@@ -4,6 +4,8 @@ import com.clinica.dtos.ConsultaRequestDTO;
 import com.clinica.dtos.ConsultaResponseDTO;
 import com.clinica.services.ConsultaService;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/agendamento/consultas")
 public class ConsultaController {
+
+    private static final Logger log = LoggerFactory.getLogger(ConsultaController.class);
 
     private final ConsultaService consultaService;
 
@@ -25,7 +29,7 @@ public class ConsultaController {
     public ConsultaResponseDTO agendarConsulta(@RequestBody ConsultaRequestDTO consultaDTO) {
         log.info("Recebida requisição para agendar nova consulta: {}", consultaDTO);
         ConsultaResponseDTO novaConsulta = consultaService.agendar(consultaDTO);
-        log.info("Consulta agendada com sucesso com o ID: {}", novaConsulta.id());
+        log.info("Consulta agendada com sucesso com o ID: {}", novaConsulta.getId());
         return novaConsulta;
     }
 
