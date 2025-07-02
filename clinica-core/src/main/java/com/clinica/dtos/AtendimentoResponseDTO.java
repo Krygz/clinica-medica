@@ -19,4 +19,7 @@ public class AtendimentoResponseDTO {
     private LocalDateTime dataHora;
     private Long pacienteId;
     private Long medicoId;
+
+public Object getId() {
+    }
 }
