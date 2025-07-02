@@ -1,4 +1,4 @@
-package com.clinica.atendimento.controller;
+package com.clinica.controllers;
 
 import com.clinica.dtos.AtendimentoRequestDTO;
 import com.clinica.dtos.AtendimentoResponseDTO;
@@ -46,4 +46,3 @@ public class AtendimentoController {
         log.info("Atendimento ID: {} cancelado com sucesso", atendimentoId);
     }
 }
-
