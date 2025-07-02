@@ -25,7 +25,7 @@ public class AtendimentoController {
     public AtendimentoResponseDTO registrarAtendimento(@RequestBody AtendimentoRequestDTO dto) {
         log.info("Recebida requisição para registrar atendimento: {}", dto);
         AtendimentoResponseDTO novo = atendimentoService.registrar(dto);
-        log.info("Atendimento registrado com ID: {}", novo.id());
+        log.info("Atendimento registrado com ID: {}", novo.getId());
         return novo;
     }
 
