@@ -2,6 +2,7 @@ package com.clinica.services;
 
 import com.clinica.dtos.AtendimentoRequestDTO;
 import com.clinica.dtos.AtendimentoResponseDTO;
+import com.clinica.dtos.AtendimentoUpdateDTO;
 import com.clinica.models.Atendimento;
 import com.clinica.models.Funcionario;
 import com.clinica.models.Paciente;
@@ -57,7 +58,7 @@ public class AtendimentoService {
         
         Atendimento atendimentoSalvo = atendimentoRepository.save(atendimento);
         
-        return modelMapper.map(atendimentoSalvo, AtendimentoResponseDTO.class);
+        return converterParaResponseDTO(atendimentoSalvo);
     }
 
     public List<AtendimentoResponseDTO> listarPorPaciente(Long pacienteId) {
@@ -66,7 +67,17 @@ public class AtendimentoService {
         List<Atendimento> atendimentos = atendimentoRepository.findByPacienteIdAndAtivoTrue(pacienteId);
         
         return atendimentos.stream()
-                .map(atendimento -> modelMapper.map(atendimento, AtendimentoResponseDTO.class))
+                .map(this::converterParaResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<AtendimentoResponseDTO> listarPorMedico(Long medicoId) {
+        log.info("Listando atendimentos do médico: {}", medicoId);
+        
+        List<Atendimento> atendimentos = atendimentoRepository.findByMedicoIdAndAtivoTrue(medicoId);
+        
+        return atendimentos.stream()
+                .map(this::converterParaResponseDTO)
                 .collect(Collectors.toList());
     }
 
@@ -87,7 +98,17 @@ public class AtendimentoService {
         List<Atendimento> atendimentos = atendimentoRepository.findAll();
         
         return atendimentos.stream()
-                .map(atendimento -> modelMapper.map(atendimento, AtendimentoResponseDTO.class))
+                .map(this::converterParaResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<AtendimentoResponseDTO> listarAtivos() {
+        log.info("Listando atendimentos ativos");
+        
+        List<Atendimento> atendimentos = atendimentoRepository.findByAtivoTrue();
+        
+        return atendimentos.stream()
+                .map(this::converterParaResponseDTO)
                 .collect(Collectors.toList());
     }
 
@@ -97,6 +118,40 @@ public class AtendimentoService {
         Atendimento atendimento = atendimentoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Atendimento não encontrado com ID: " + id));
         
-        return modelMapper.map(atendimento, AtendimentoResponseDTO.class);
+        return converterParaResponseDTO(atendimento);
+    }
+
+    @Transactional
+    public AtendimentoResponseDTO atualizar(Long id, AtendimentoUpdateDTO dto) {
+        log.info("Atualizando atendimento ID: {} com dados: {}", id, dto);
+        
+        Atendimento atendimento = atendimentoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Atendimento não encontrado com ID: " + id));
+        
+        atendimento.setDescricao(dto.getDescricao());
+        if (dto.getDataHora() != null) {
+            atendimento.setDataHora(dto.getDataHora());
+        }
+        
+        Atendimento atendimentoAtualizado = atendimentoRepository.save(atendimento);
+        
+        return converterParaResponseDTO(atendimentoAtualizado);
+    }
+
+    public List<AtendimentoResponseDTO> buscarPorPeriodo(LocalDateTime inicio, LocalDateTime fim) {
+        log.info("Buscando atendimentos entre {} e {}", inicio, fim);
+        
+        List<Atendimento> atendimentos = atendimentoRepository.findByDataHoraBetweenAndAtivoTrue(inicio, fim);
+        
+        return atendimentos.stream()
+                .map(this::converterParaResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    private AtendimentoResponseDTO converterParaResponseDTO(Atendimento atendimento) {
+        AtendimentoResponseDTO dto = modelMapper.map(atendimento, AtendimentoResponseDTO.class);
+        dto.setPacienteNome(atendimento.getPaciente().getNome());
+        dto.setMedicoNome(atendimento.getMedico().getUsuario());
+        return dto;
     }
 } 

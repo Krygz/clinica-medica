@@ -1,0 +1,156 @@
+{
+  "info": {
+    "name": "Clínica Médica - Atendimento API",
+    "description": "Collection para testar a API de atendimentos médicos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Registrar Atendimento",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"descricao\": \"Consulta de rotina - paciente com dor de cabeça\",\n  \"dataHora\": \"2024-01-15 14:30:00\",\n  \"pacienteId\": 1,\n  \"medicoId\": 2\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8082/atendimento/api/v1/atendimentos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8082",
+          "path": ["atendimento", "api", "v1", "atendimentos"]
+        }
+      }
+    },
+    {
+      "name": "Buscar Atendimento por ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8082/atendimento/api/v1/atendimentos/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8082",
+          "path": ["atendimento", "api", "v1", "atendimentos", "1"]
+        }
+      }
+    },
+    {
+      "name": "Listar Todos os Atendimentos",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8082/atendimento/api/v1/atendimentos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8082",
+          "path": ["atendimento", "api", "v1", "atendimentos"]
+        }
+      }
+    },
+    {
+      "name": "Listar Atendimentos Ativos",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8082/atendimento/api/v1/atendimentos/ativos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8082",
+          "path": ["atendimento", "api", "v1", "atendimentos", "ativos"]
+        }
+      }
+    },
+    {
+      "name": "Listar Atendimentos por Paciente",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8082/atendimento/api/v1/atendimentos/paciente/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8082",
+          "path": ["atendimento", "api", "v1", "atendimentos", "paciente", "1"]
+        }
+      }
+    },
+    {
+      "name": "Listar Atendimentos por Médico",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8082/atendimento/api/v1/atendimentos/medico/2",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8082",
+          "path": ["atendimento", "api", "v1", "atendimentos", "medico", "2"]
+        }
+      }
+    },
+    {
+      "name": "Buscar Atendimentos por Período",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8082/atendimento/api/v1/atendimentos/periodo?inicio=2024-01-01 00:00:00&fim=2024-01-31 23:59:59",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8082",
+          "path": ["atendimento", "api", "v1", "atendimentos", "periodo"],
+          "query": [
+            {
+              "key": "inicio",
+              "value": "2024-01-01 00:00:00"
+            },
+            {
+              "key": "fim",
+              "value": "2024-01-31 23:59:59"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Atualizar Atendimento",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"descricao\": \"Consulta de rotina - paciente com dor de cabeça - ATUALIZADO\",\n  \"dataHora\": \"2024-01-15 15:00:00\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8082/atendimento/api/v1/atendimentos/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8082",
+          "path": ["atendimento", "api", "v1", "atendimentos", "1"]
+        }
+      }
+    },
+    {
+      "name": "Cancelar Atendimento",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:8082/atendimento/api/v1/atendimentos/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8082",
+          "path": ["atendimento", "api", "v1", "atendimentos", "1"]
+        }
+      }
+    }
+  ]
+} 
