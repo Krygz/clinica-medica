@@ -21,5 +21,6 @@ public class AtendimentoResponseDTO {
     private Long medicoId;
 
 public Object getId() {
+    return this.id;
     }
 }
