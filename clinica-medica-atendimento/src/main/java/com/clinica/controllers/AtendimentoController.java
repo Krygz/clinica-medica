@@ -1,4 +1,4 @@
-package com.clinica.controllers;
+package com.clinica.atendimento.controller;
 
 import com.clinica.dtos.AtendimentoRequestDTO;
 import com.clinica.dtos.AtendimentoResponseDTO;
